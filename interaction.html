@@ -27,27 +27,53 @@
 
             let x = 0;
             let y = 0;
+
+            const speed = 10;
+            const keyboard = {}
+            
             function render(){
                 requestAnimationFrame(render);
+                ctx.fillStyle = "lightblue";
+                ctx.fillRect(0,0,canvas.width, canvas.height);
+
+                if(keyboard.a) x -= speed;
+                if(keyboard.d) x += speed;
+                if(keyboard.w) y -= speed;
+                if(keyboard.s) y += speed;
+
                 ctx.fillStyle = "yellow";
                 ctx.fillRect(x, y, 30, 30);
             }
 
+            //Mouse
+            /*
             document.addEventListener("mousemove", function (event){
                 x = event.pageX;
                 y = event.pageY;
             });
+            */
 
             let isMouseDown = true;
             
-            //Image
-            image = new Image();
-            image.src = "https://vignette.wikia.nocookie.net/virginquest/images/8/80/Van_Darkholme.png/revision/latest?cb=20130313195216";
-            image.onload = function(){
-                ctx.drawImage(image, 200,300);
-            }
-
             requestAnimationFrame(render);
+
+            //teclat
+
+            document.addEventListener("keydown", function (event){
+                /*
+                switch(event.key){
+                    case "a": x -= speed; break;
+                    case "d": x+= speed; break;
+                    case "s": y += speed; break;
+                    case "w": y -= speed; break;
+                }
+                */
+                keyboard[event.key] = true;
+
+            });            
+            document.addEventListener("keyup", function (event){
+                keyboard[event.key] = false;
+            });            
         </script>
     </body>
 </html>
