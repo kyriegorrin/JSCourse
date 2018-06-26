@@ -68,7 +68,7 @@
                     if(enemies[i].y <= 0 || enemies[i].y >= canvas.height )
                         enemies[i].vy *= -1;
 
-                    //Collision entre jugador
+                    //Collision entre jugado
                     if(doesCollidePlayer(enemies[i])){
                         enemies[i].vx *= -1;
                         enemies[i].vy *= -1;

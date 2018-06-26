@@ -33,13 +33,14 @@
                 ctx.lineTo(0, crossSize);
                 ctx.stroke();
             }
+            
             ctx.save();
             ctx.translate(100, 100);
             drawCross();
             ctx.translate(70, 0);
             drawCross();
             ctx.rotate(Math.PI/4);
-
+            
             ctx.fillStyle = "lightblue";
             ctx.fillRect(50,50,100,100);
 
