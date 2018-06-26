@@ -10,5 +10,15 @@
         socket.on("welcome", function(){
             console.log("got welcome from server")
         })
+
+        socket.on("ACK", function(message){
+            console.log(message)
+        })
+
+        function sendMessage(message){
+            socket.emit("chat", message);
+        }
+        
+        sendMessage(prompt("Hello titus"));
     </script>
 </body>

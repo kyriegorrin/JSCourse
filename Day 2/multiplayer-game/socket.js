@@ -5,6 +5,10 @@ var server = require("http").createServer(app)
 var io = require("socket.io")(server)
 var port = process.env.PORT || 3000
 
+//Data structures for state
+//TODO
+
+//TODO: update all this shit
 server.listen(port, () => {
     console.log("Server listening at port %d", port)
 })

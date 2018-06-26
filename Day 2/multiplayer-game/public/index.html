@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <style>
+            body, body{
+                padding: 0;
+                margin: 0;   
+            }
+            canvas{
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <script src="/socket.io/socket.io.js"></script>    
+    </head>
+
+    <body>
+        <script>
+            //Connection with sockets
+            //ATTENTION it's just a placeholder
+            const socket = io()    
+            socket.emit("msg", "hi my name is david")
+
+            socket.on("welcome", function(){
+                console.log("got welcome from server")
+            })
+
+            socket.on("ACK", function(message){
+                console.log(message)
+            })
+        
+            //Canvas generation
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            document.body.appendChild(canvas);
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            ctx.fillStyle = "lightblue";
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+
+            //Data structures for communication
+            const keyboard = {}
+
+            function render(){
+                requestAnimationFrame(render);
+                ctx.fillStyle = "lightblue";
+                ctx.fillRect(0,0,canvas.width, canvas.height);
+
+                ctx.fillStyle = "yellow";
+                for(i = 0; i < enemies.length; ++i){
+                    ctx.fillRect(enemies[i].x, enemies[i].y, 20, 20);
+                }
+                
+                ctx.fillStyle = "blue"
+                ctx.fillRect(x,y,20,20);                                    
+            }
+            
+            function doesCollide(box1, box2){
+                if(Math.abs(box1.x - box2.x) < (box.width/2 + box.width/2) &&
+                    Math.abs(box1.y - box2.y) < (box.height/2 + box.height/2)){
+                        return true;
+                    }
+                else return false;
+            }
+
+            function doesCollidePlayer(box){
+                if(Math.abs(box.x - x) < (box.width/2 + 20/2) &&
+                    Math.abs(box.y - y) < (box.height/2 + 20/2)){
+                        return true;
+                    }
+                else return false;
+            }
+
+            function poblate(){
+                for (i = 0; i < 25; ++i){
+                    enemies.push({
+                        x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+                        vx:1, vy:1,
+                        height: 20,
+                        width: 20
+                    })
+                }
+            }
+            requestAnimationFrame(render);
+
+            //teclat
+            document.addEventListener("keydown", function (event){
+                keyboard[event.key] = true;
+            });            
+
+            document.addEventListener("keyup", function (event){
+                keyboard[event.key] = false;
+            });            
+        </script>
+    </body>
+</html>
