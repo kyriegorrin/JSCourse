@@ -1,0 +1,88 @@
+<html>
+<head>
+    <style>
+        body, body {
+            padding: 0;
+            margin: 0;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://raw.githubusercontent.com/dasilvacontin/Eximo.js/master/Eximo.js"></script>
+    <script src="Player.js"></script>
+    <script src="Ball.js"></script>
+</head>
+
+<body>
+<script>
+    //---------Initial canvas config--------------------//
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    document.body.appendChild(canvas)
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    ctx.fillStyle = 'lightblue'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    const TOP_BOUNDARY = 50
+    const BOTTOM_BOUNDARY = 450
+    const LEFT_BOUNDARY = 50
+    const RIGHT_BOUNDARY = 700
+
+    //--------Players and components of the game---------//
+    players = []
+    players.push(new Player(ctx, 1, "Placeholder", 10, 10))
+    players.push(new Player(ctx, 2, "Placeholder", canvas.width-20, 10))
+
+    balls = []
+    balls.push(new Ball(ctx, 50, 50))
+
+    //-----------Logic defining functions----------------//
+    function processNewState(){
+        //TODO
+    }
+
+    //----------------Rendering section------------------//
+    function render () {
+        requestAnimationFrame(render)
+        //Player rendering
+        for(i = 0; i < players.length; ++i){
+            players[i].render()
+        }
+        //Ball rendering
+        for(i = 0; i < balls.length; ++i){
+            balls[i].render()
+        }
+    }
+    requestAnimationFrame(render)
+
+    //--------Input administration and listeners-----------//
+    const keyboard = {}
+    const mapping = {
+        a: 'left',
+        d: 'right',
+        w: 'up',
+        s: 'down'
+    }
+    document.addEventListener('keydown', function (event) {
+        keyboard[mapping[event.key]] = true
+    })
+    document.addEventListener('keyup', function (event) {
+        keyboard[mapping[event.key]] = false
+    })
+    
+    //-----------Sockets and Multiplayer stuff------------//
+    const socket = io()
+    socket.emit('set-username', prompt('Username?'))
+    socket.on('state', function (newState) {
+        state = newState
+        myPlayer = state.players.find(player => {
+            return (player.id === socket.id)
+        })
+    })
+</script>
+</body>
+</html>
