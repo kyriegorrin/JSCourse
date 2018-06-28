@@ -20,10 +20,15 @@ class Player{
         this.vy = amount
     }
 
+    //Utilities
+    applyMovement(){
+        this.y += this.vy
+    }
+
     //Area movement limit checker
     //Remember that Y axis is inverted
     isBounded(top, bottom){
-        if(this.y > bottom || this.y < top){
+        if(this.y >= bottom || this.y <= top){
             return false
         }
         else return true

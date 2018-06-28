@@ -19,35 +19,67 @@
 <body>
 <script>
     //---------Initial canvas config--------------------//
+    //Game boundaries
+    const TOP_BOUNDARY = 50
+    const BOTTOM_BOUNDARY = 450
+    const LEFT_BOUNDARY = 50
+    const RIGHT_BOUNDARY = 700
+
+    //Canvas boundaries
+    const BOT_CANVAS = 600
+    const RIGHT_CANVAS = 800
+
+    //Canvas and context creation
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     document.body.appendChild(canvas)
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
     ctx.fillStyle = 'lightblue'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-    const TOP_BOUNDARY = 50
-    const BOTTOM_BOUNDARY = 450
-    const LEFT_BOUNDARY = 50
-    const RIGHT_BOUNDARY = 700
+    ctx.fillRect(0, 0, RIGHT_CANVAS, BOT_CANVAS)
 
     //--------Players and components of the game---------//
     players = []
-    players.push(new Player(ctx, 1, "Placeholder", 10, 10))
-    players.push(new Player(ctx, 2, "Placeholder", canvas.width-20, 10))
+    players.push(new Player(ctx, 1, "Placeholder", LEFT_BOUNDARY, TOP_BOUNDARY+10))
+    players.push(new Player(ctx, 2, "Placeholder", RIGHT_BOUNDARY-20, TOP_BOUNDARY+10))
 
     balls = []
-    balls.push(new Ball(ctx, 50, 50))
+    balls.push(new Ball(ctx, 200, 200))
+
+    //Initial ball velocity
+    balls[0].setVelocity(1,1)
 
     //-----------Logic defining functions----------------//
     function processNewState(){
-        //TODO
+        for(i = 0; i < players.length; ++i){
+            if(players[i].isBounded(TOP_BOUNDARY, BOTTOM_BOUNDARY)){
+                //Do player shenanigans
+                if(keyboard[["ArrowUp"]]) players[i].setVy(-1)
+                else if(keyboard["ArrowDown"]) players[i].setVy(1)
+                else players[i].setVy(0)
+
+                players[i].applyMovement()
+            }
+            else{
+                //Do other player shenanigans
+            }
+        }
+        for(i = 0; i < balls.length; ++i){
+            //TODO: check my balls lmao
+        }
     }
 
     //----------------Rendering section------------------//
-    function render () {
+    function render() {
         requestAnimationFrame(render)
+        
+        //Processing new state before rendering
+        processNewState()
+
+        //Rendering background
+        ctx.fillStyle = 'lightblue'
+        ctx.fillRect(0, 0, RIGHT_CANVAS, BOT_CANVAS)
+
         //Player rendering
         for(i = 0; i < players.length; ++i){
             players[i].render()
@@ -68,10 +100,12 @@
         s: 'down'
     }
     document.addEventListener('keydown', function (event) {
-        keyboard[mapping[event.key]] = true
+        keyboard[event.key]= true
+        console.log(event.key)
+        //console.log(keyboard[mapping[event.key]])
     })
     document.addEventListener('keyup', function (event) {
-        keyboard[mapping[event.key]] = false
+        keyboard[event.key] = false
     })
     
     //-----------Sockets and Multiplayer stuff------------//
